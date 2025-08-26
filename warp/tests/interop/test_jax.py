@@ -442,7 +442,7 @@ def double_func(
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_kernel_add(test, device):
+def test_jax_kernel_add(test, device):
     # two inputs and one output
     import jax.numpy as jp
 
@@ -467,7 +467,7 @@ def test_ffi_jax_kernel_add(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_kernel_sincos(test, device):
+def test_jax_kernel_sincos(test, device):
     # one input and two outputs
     import jax.numpy as jp
 
@@ -496,7 +496,7 @@ def test_ffi_jax_kernel_sincos(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_kernel_diagonal(test, device):
+def test_jax_kernel_diagonal(test, device):
     # no inputs and one output
     from warp.jax_experimental.ffi import jax_kernel
 
@@ -525,7 +525,7 @@ def test_ffi_jax_kernel_diagonal(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_kernel_in_out(test, device):
+def test_jax_kernel_in_out(test, device):
     # in-out args
     import jax.numpy as jp
 
@@ -545,7 +545,7 @@ def test_ffi_jax_kernel_in_out(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_kernel_scale_vec_constant(test, device):
+def test_jax_kernel_scale_vec_constant(test, device):
     # multiply vectors by scalar (constant)
     import jax.numpy as jp
 
@@ -568,7 +568,7 @@ def test_ffi_jax_kernel_scale_vec_constant(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_kernel_scale_vec_static(test, device):
+def test_jax_kernel_scale_vec_static(test, device):
     # multiply vectors by scalar (static arg)
     import jax.numpy as jp
 
@@ -593,7 +593,7 @@ def test_ffi_jax_kernel_scale_vec_static(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_kernel_launch_dims_default(test, device):
+def test_jax_kernel_launch_dims_default(test, device):
     # specify default launch dims
     import jax.numpy as jp
 
@@ -621,7 +621,7 @@ def test_ffi_jax_kernel_launch_dims_default(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_kernel_launch_dims_custom(test, device):
+def test_jax_kernel_launch_dims_custom(test, device):
     # specify custom launch dims per call
     import jax.numpy as jp
 
@@ -660,7 +660,7 @@ def test_ffi_jax_kernel_launch_dims_custom(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_callable_scale_constant(test, device):
+def test_jax_callable_scale_constant(test, device):
     # scale two arrays using a constant
     import jax.numpy as jp
 
@@ -693,7 +693,7 @@ def test_ffi_jax_callable_scale_constant(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_callable_scale_static(test, device):
+def test_jax_callable_scale_static(test, device):
     # scale two arrays using a static arg
     import jax.numpy as jp
 
@@ -726,7 +726,7 @@ def test_ffi_jax_callable_scale_static(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_callable_in_out(test, device):
+def test_jax_callable_in_out(test, device):
     # in-out arguments
     import jax.numpy as jp
 
@@ -746,7 +746,7 @@ def test_ffi_jax_callable_in_out(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_callable_graph_cache(test, device):
+def test_jax_callable_graph_cache(test, device):
     # test graph caching limits
     import jax
     import jax.numpy as jp
@@ -847,7 +847,7 @@ def test_ffi_jax_callable_graph_cache(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_callable_pmap_mul_forward(test, device):
+def test_jax_callable_pmap_mul_forward(test, device):
     import jax
     import jax.numpy as jp
 
@@ -879,7 +879,7 @@ def test_ffi_jax_callable_pmap_mul_forward(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_callable_pmap_multi_output_forward(test, device):
+def test_jax_callable_pmap_multi_output_forward(test, device):
     import jax
     import jax.numpy as jp
 
@@ -926,7 +926,7 @@ def test_ffi_jax_callable_pmap_multi_output_forward(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 5, 0), "Jax version too old")
-def test_ffi_jax_callable_pmap_multi_stage_forward(test, device):
+def test_jax_callable_pmap_multi_stage_forward(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1031,8 +1031,10 @@ def test_ffi_callback(test, device):
 
     assert_np_equal(c, 2 * np.arange(10, dtype=np.float32))
     assert_np_equal(d, 2 * np.arange(10, dtype=np.float32).reshape((5, 2)))
+
+
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_simple(test, device):
+def test_jax_ad_kernel_simple(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1043,7 +1045,9 @@ def test_ffi_jax_ad_kernel_simple(test, device):
         tid = wp.tid()
         c[tid] = (a[tid] * s + b[tid]) ** 2.0
 
-    jax_func = jax_kernel(scale_sum_square_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential")
+    jax_func = jax_kernel(
+        scale_sum_square_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential"
+    )
 
     from functools import partial
 
@@ -1073,7 +1077,88 @@ def test_ffi_jax_ad_kernel_simple(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_multi_output(test, device):
+def test_jax_ad_kernel_jit_of_grad_simple(test, device):
+    import jax
+    import jax.numpy as jp
+
+    from warp.jax_experimental.ffi import jax_kernel
+
+    @wp.kernel
+    def scale_sum_square_kernel(a: wp.array(dtype=float), b: wp.array(dtype=float), s: float, c: wp.array(dtype=float)):
+        tid = wp.tid()
+        c[tid] = (a[tid] * s + b[tid]) ** 2.0
+
+    jax_func = jax_kernel(scale_sum_square_kernel, num_outputs=1, static_argnames=("s",), differentiable=True)
+
+    def loss(a, b, s):
+        out = jax_func(a, b, s)[0]
+        return jp.sum(out)
+
+    grad_fn = jax.grad(loss, argnums=(0, 1))
+
+    # more typical: jit(grad(...)) with static scalar
+    jitted_grad = jax.jit(lambda a, b, s: grad_fn(a, b, s), static_argnames=("s",))
+
+    n = 16
+    a = jp.arange(n, dtype=jp.float32)
+    b = jp.ones(n, dtype=jp.float32)
+    s = 2.0
+
+    with jax.default_device(wp.device_to_jax(device)):
+        da, db = jitted_grad(a, b, s)
+
+    a_np = np.arange(n, dtype=np.float32)
+    b_np = np.ones(n, dtype=np.float32)
+    ref_da = 2.0 * (a_np * s + b_np) * s
+    ref_db = 2.0 * (a_np * s + b_np)
+
+    assert_np_equal(np.asarray(da), ref_da)
+    assert_np_equal(np.asarray(db), ref_db)
+
+
+@unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
+def test_jax_ad_kernel_jit_of_grad_multi_output(test, device):
+    import jax
+    import jax.numpy as jp
+
+    from warp.jax_experimental.ffi import jax_kernel
+
+    @wp.kernel
+    def multi_output_kernel(
+        a: wp.array(dtype=float), b: wp.array(dtype=float), s: float, c: wp.array(dtype=float), d: wp.array(dtype=float)
+    ):
+        tid = wp.tid()
+        c[tid] = a[tid] ** 2.0
+        d[tid] = a[tid] * b[tid] * s
+
+    jax_func = jax_kernel(multi_output_kernel, num_outputs=2, static_argnames=("s",), differentiable=True)
+
+    def loss(a, b, s):
+        c, d = jax_func(a, b, s)
+        return jp.sum(c + d)
+
+    grad_fn = jax.grad(loss, argnums=(0, 1))
+    jitted_grad = jax.jit(lambda a, b, s: grad_fn(a, b, s), static_argnames=("s",))
+
+    n = 16
+    a = jp.arange(n, dtype=jp.float32)
+    b = jp.ones(n, dtype=jp.float32)
+    s = 2.0
+
+    with jax.default_device(wp.device_to_jax(device)):
+        da, db = jitted_grad(a, b, s)
+
+    a_np = np.arange(n, dtype=np.float32)
+    b_np = np.ones(n, dtype=np.float32)
+    ref_da = 2.0 * a_np + b_np * s
+    ref_db = a_np * s
+
+    assert_np_equal(np.asarray(da), ref_da)
+    assert_np_equal(np.asarray(db), ref_db)
+
+
+@unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
+def test_jax_ad_kernel_multi_output(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1121,7 +1206,7 @@ def test_ffi_jax_ad_kernel_multi_output(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_vec2(test, device):
+def test_jax_ad_kernel_vec2(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1154,7 +1239,7 @@ def test_ffi_jax_ad_kernel_vec2(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_2d(test, device):
+def test_jax_ad_kernel_2d(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1183,7 +1268,7 @@ def test_ffi_jax_ad_kernel_2d(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_mat22(test, device):
+def test_jax_ad_kernel_mat22(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1215,7 +1300,7 @@ def test_ffi_jax_ad_kernel_mat22(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_vmap_simple(test, device):
+def test_jax_ad_kernel_vmap_simple(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1253,7 +1338,7 @@ def test_ffi_jax_ad_kernel_vmap_simple(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_vmap_vec2(test, device):
+def test_jax_ad_kernel_vmap_vec2(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1264,7 +1349,9 @@ def test_ffi_jax_ad_kernel_vmap_vec2(test, device):
         tid = wp.tid()
         out[tid] = a[tid] * s
 
-    jax_func = jax_kernel(scale_vec_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential")
+    jax_func = jax_kernel(
+        scale_vec_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential"
+    )
 
     def per_sample_loss(a):
         out = jax_func(a, 2.0)[0]
@@ -1282,7 +1369,7 @@ def test_ffi_jax_ad_kernel_vmap_vec2(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_vmap_multi_output(test, device):
+def test_jax_ad_kernel_vmap_multi_output(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1296,7 +1383,9 @@ def test_ffi_jax_ad_kernel_vmap_multi_output(test, device):
         c[tid] = a[tid] ** 2.0
         d[tid] = a[tid] * b[tid] * s
 
-    jax_func = jax_kernel(multi_output_kernel, num_outputs=2, differentiable=True, static_argnames=("s",), vmap_method="sequential")
+    jax_func = jax_kernel(
+        multi_output_kernel, num_outputs=2, differentiable=True, static_argnames=("s",), vmap_method="sequential"
+    )
 
     def per_sample_loss(a, b):
         c, d = jax_func(a, b, 2.0)
@@ -1320,7 +1409,7 @@ def test_ffi_jax_ad_kernel_vmap_multi_output(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_vmap_expand_dims_simple(test, device):
+def test_jax_ad_kernel_vmap_expand_dims_simple(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1356,9 +1445,8 @@ def test_ffi_jax_ad_kernel_vmap_expand_dims_simple(test, device):
     assert_np_equal(np.asarray(db), ref_db)
 
 
-
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_vmap_double_batch(test, device):
+def test_jax_ad_kernel_vmap_double_batch(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1395,9 +1483,8 @@ def test_ffi_jax_ad_kernel_vmap_double_batch(test, device):
     assert_np_equal(np.asarray(db), ref_db)
 
 
-
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_vmap_2d_expand_dims(test, device):
+def test_jax_ad_kernel_vmap_2d_expand_dims(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1425,7 +1512,7 @@ def test_ffi_jax_ad_kernel_vmap_2d_expand_dims(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_static_required(test, device):
+def test_jax_ad_kernel_static_required(test, device):
     import jax
     import jax.numpy as jp
 
@@ -1551,143 +1638,160 @@ try:
             )
 
         # ffi.jax_kernel() tests
+        add_function_test(TestJax, "test_jax_kernel_add", test_jax_kernel_add, devices=jax_compatible_cuda_devices)
         add_function_test(
-            TestJax, "test_ffi_jax_kernel_add", test_ffi_jax_kernel_add, devices=jax_compatible_cuda_devices
+            TestJax, "test_jax_kernel_sincos", test_jax_kernel_sincos, devices=jax_compatible_cuda_devices
         )
         add_function_test(
-            TestJax, "test_ffi_jax_kernel_sincos", test_ffi_jax_kernel_sincos, devices=jax_compatible_cuda_devices
+            TestJax, "test_jax_kernel_diagonal", test_jax_kernel_diagonal, devices=jax_compatible_cuda_devices
         )
         add_function_test(
-            TestJax, "test_ffi_jax_kernel_diagonal", test_ffi_jax_kernel_diagonal, devices=jax_compatible_cuda_devices
-        )
-        add_function_test(
-            TestJax, "test_ffi_jax_kernel_in_out", test_ffi_jax_kernel_in_out, devices=jax_compatible_cuda_devices
+            TestJax, "test_jax_kernel_in_out", test_jax_kernel_in_out, devices=jax_compatible_cuda_devices
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_kernel_scale_vec_constant",
-            test_ffi_jax_kernel_scale_vec_constant,
+            "test_jax_kernel_scale_vec_constant",
+            test_jax_kernel_scale_vec_constant,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_kernel_scale_vec_static",
-            test_ffi_jax_kernel_scale_vec_static,
+            "test_jax_kernel_scale_vec_static",
+            test_jax_kernel_scale_vec_static,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_kernel_launch_dims_default",
-            test_ffi_jax_kernel_launch_dims_default,
+            "test_jax_kernel_launch_dims_default",
+            test_jax_kernel_launch_dims_default,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_kernel_launch_dims_custom",
-            test_ffi_jax_kernel_launch_dims_custom,
+            "test_jax_kernel_launch_dims_custom",
+            test_jax_kernel_launch_dims_custom,
             devices=jax_compatible_cuda_devices,
         )
 
         # ffi.jax_callable() tests
         add_function_test(
             TestJax,
-            "test_ffi_jax_callable_scale_constant",
-            test_ffi_jax_callable_scale_constant,
+            "test_jax_callable_scale_constant",
+            test_jax_callable_scale_constant,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_callable_scale_static",
-            test_ffi_jax_callable_scale_static,
+            "test_jax_callable_scale_static",
+            test_jax_callable_scale_static,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
-            TestJax, "test_ffi_jax_callable_in_out", test_ffi_jax_callable_in_out, devices=jax_compatible_cuda_devices
+            TestJax, "test_jax_callable_in_out", test_jax_callable_in_out, devices=jax_compatible_cuda_devices
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_callable_graph_cache",
-            test_ffi_jax_callable_graph_cache,
-            devices=jax_compatible_cuda_devices,
-        )
-        add_function_test(
-            TestJax,
-            "test_ffi_jax_callable_pmap_multi_output_forward",
-            test_ffi_jax_callable_pmap_multi_output_forward,
+            "test_jax_callable_graph_cache",
+            test_jax_callable_graph_cache,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_callable_pmap_mul_forward",
-            test_ffi_jax_callable_pmap_mul_forward,
+            "test_jax_callable_pmap_multi_output_forward",
+            test_jax_callable_pmap_multi_output_forward,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_callable_pmap_multi_stage_forward",
-            test_ffi_jax_callable_pmap_multi_stage_forward,
+            "test_jax_callable_pmap_mul_forward",
+            test_jax_callable_pmap_mul_forward,
+            devices=jax_compatible_cuda_devices,
+        )
+        add_function_test(
+            TestJax,
+            "test_jax_callable_pmap_multi_stage_forward",
+            test_jax_callable_pmap_multi_stage_forward,
             devices=jax_compatible_cuda_devices,
         )
 
         # ffi callback tests
         add_function_test(TestJax, "test_ffi_callback", test_ffi_callback, devices=jax_compatible_cuda_devices)
 
-
         add_function_test(
-            TestJax, "test_ffi_jax_ad_kernel_simple", test_ffi_jax_ad_kernel_simple, devices=jax_compatible_cuda_devices
+            TestJax, "test_jax_ad_kernel_simple", test_jax_ad_kernel_simple, devices=jax_compatible_cuda_devices
         )
 
         add_function_test(
             TestJax,
-            "test_ffi_jax_ad_kernel_multi_output",
-            test_ffi_jax_ad_kernel_multi_output,
+            "test_jax_ad_kernel_multi_output",
+            test_jax_ad_kernel_multi_output,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
-            TestJax, "test_ffi_jax_ad_kernel_vec2", test_ffi_jax_ad_kernel_vec2, devices=jax_compatible_cuda_devices
+            TestJax, "test_jax_ad_kernel_vec2", test_jax_ad_kernel_vec2, devices=jax_compatible_cuda_devices
         )
-        add_function_test(TestJax, "test_ffi_jax_ad_kernel_2d", test_ffi_jax_ad_kernel_2d, devices=jax_compatible_cuda_devices)
+        add_function_test(TestJax, "test_jax_ad_kernel_2d", test_jax_ad_kernel_2d, devices=jax_compatible_cuda_devices)
         add_function_test(
-            TestJax, "test_ffi_jax_ad_kernel_mat22", test_ffi_jax_ad_kernel_mat22, devices=jax_compatible_cuda_devices
+            TestJax, "test_jax_ad_kernel_mat22", test_jax_ad_kernel_mat22, devices=jax_compatible_cuda_devices
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_ad_kernel_vmap_simple",
-            test_ffi_jax_ad_kernel_vmap_simple,
+            "test_jax_ad_kernel_vmap_simple",
+            test_jax_ad_kernel_vmap_simple,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
-            TestJax,
-            "test_ffi_jax_ad_kernel_auto_static_argnames",
-            test_ffi_jax_ad_kernel_auto_static_argnames,
-            devices=jax_compatible_cuda_devices,
-        )
-        add_function_test(
-            TestJax, "test_ffi_jax_ad_kernel_vmap_vec2", test_ffi_jax_ad_kernel_vmap_vec2, devices=jax_compatible_cuda_devices
+            TestJax, "test_jax_ad_kernel_vmap_vec2", test_jax_ad_kernel_vmap_vec2, devices=jax_compatible_cuda_devices
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_ad_kernel_vmap_multi_output",
-            test_ffi_jax_ad_kernel_vmap_multi_output,
+            "test_jax_ad_kernel_vmap_multi_output",
+            test_jax_ad_kernel_vmap_multi_output,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_ad_kernel_vmap_expand_dims_simple",
-            test_ffi_jax_ad_kernel_vmap_expand_dims_simple,
+            "test_jax_ad_kernel_vmap_expand_dims_simple",
+            test_jax_ad_kernel_vmap_expand_dims_simple,
             devices=jax_compatible_cuda_devices,
         )
 
         add_function_test(
             TestJax,
-            "test_ffi_jax_ad_kernel_vmap_double_batch",
-            test_ffi_jax_ad_kernel_vmap_double_batch,
+            "test_jax_ad_kernel_vmap_double_batch",
+            test_jax_ad_kernel_vmap_double_batch,
             devices=jax_compatible_cuda_devices,
         )
         add_function_test(
             TestJax,
-            "test_ffi_jax_ad_kernel_vmap_2d_expand_dims",
-            test_ffi_jax_ad_kernel_vmap_2d_expand_dims,
+            "test_jax_ad_kernel_vmap_2d_expand_dims",
+            test_jax_ad_kernel_vmap_2d_expand_dims,
+            devices=jax_compatible_cuda_devices,
+        )
+
+        add_function_test(
+            TestJax,
+            "test_jax_ad_kernel_jit_of_grad_simple",
+            test_jax_ad_kernel_jit_of_grad_simple,
+            devices=jax_compatible_cuda_devices,
+        )
+        add_function_test(
+            TestJax,
+            "test_jax_ad_kernel_jit_of_grad_multi_output",
+            test_jax_ad_kernel_jit_of_grad_multi_output,
+            devices=jax_compatible_cuda_devices,
+        )
+
+        add_function_test(
+            TestJax,
+            "test_jax_ad_kernel_jit_of_grad_simple",
+            test_jax_ad_kernel_jit_of_grad_simple,
+            devices=jax_compatible_cuda_devices,
+        )
+        add_function_test(
+            TestJax,
+            "test_jax_ad_kernel_jit_of_grad_multi_output",
+            test_jax_ad_kernel_jit_of_grad_multi_output,
             devices=jax_compatible_cuda_devices,
         )
 

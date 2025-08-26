@@ -996,7 +996,7 @@ def jax_callable(
     num_outputs: int = 1,
     graph_compatible: Optional[bool] = None,  # deprecated
     graph_mode: GraphMode = GraphMode.JAX,
-    vmap_method: Optional[str] = "broadcast_all",
+    vmap_method: Optional[str] = "sequential",
     output_dims=None,
     in_out_argnames=None,
     graph_cache_max: int | None = None,
