@@ -1048,6 +1048,24 @@ Notes
   specify them explicitly via ``static_argnames``.
 - Gradients are returned for differentiable array inputs (static scalars are excluded from the gradient tuple).
 - CUDA backend is required.
+- Input-output (``in_out``) arguments are not supported when ``differentiable=True``.
+
+
+Launch dimensions with AD
+.........................
+
+When ``differentiable=True``, the wrapper infers launch dimensions from array inputs:
+
+- For scalar arrays, it uses the last ``ndim`` elements of the JAX array shape.
+- For vector/matrix arrays, it uses the core shape just before the inner dtype payload dimensions
+  (e.g., for a ``wp.vec3`` array with JAX shape ``(..., N, 3)`` it uses ``N``; for a ``wp.mat22`` array with
+  JAX shape ``(..., N, 2, 2)`` it uses ``N``).
+- Leading batch axes introduced by :func:`jax.vmap` are preserved by JAX; you do not need to modify the kernel
+  launch dimensions for batched execution.
+
+If no array input is available to infer launch dimensions, AD launches are not supported and a runtime error is raised.
+Annotate inputs with Warp array types (e.g., ``wp.array(dtype=float)`` or ``wp.array(dtype=wp.vec2)``) so shapes can be
+derived correctly.
 
 
 VMAP with gradients
@@ -1090,6 +1108,14 @@ Constraints and tips:
 - Kernel arguments must be contiguous arrays or scalars. Scalars must be static in JAX (pass via ``static_argnames`` or use Python constants).
 - Only the CUDA backend is supported.
 - For vector/matrix arrays, specify Warp dtypes (e.g., ``wp.vec2``); JAX inner component dimensions are derived automatically.
+
+Troubleshooting
+..............
+
+- If you see an error like ``Missing output dimensions for argument 'x__vjp'``, make sure the corresponding kernel
+  input is annotated as a Warp array (for example, ``x: wp.array(dtype=float)``). For vector/matrix arrays, specify
+  the Warp dtype (e.g., ``wp.vec2``, ``wp.mat22``). This lets the AD wrapper compute per-input gradient shapes under vmap.
+- ``in_out`` arguments are not yet supported in AD. Split such arguments into separate input and output arrays.
 
 
 Calling Annotated Python Functions
