@@ -1036,14 +1036,14 @@ def test_ffi_jax_ad_kernel_simple(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_sum_square_kernel(a: wp.array(dtype=float), b: wp.array(dtype=float), s: float, c: wp.array(dtype=float)):
         tid = wp.tid()
         c[tid] = (a[tid] * s + b[tid]) ** 2.0
 
-    jax_func = jax_ad_kernel(scale_sum_square_kernel, num_outputs=1, static_argnames=("s",), vmap_method="sequential")
+    jax_func = jax_kernel(scale_sum_square_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential")
 
     from functools import partial
 
@@ -1077,7 +1077,7 @@ def test_ffi_jax_ad_kernel_multi_output(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def multi_output_kernel(
@@ -1087,7 +1087,7 @@ def test_ffi_jax_ad_kernel_multi_output(test, device):
         c[tid] = a[tid] ** 2.0
         d[tid] = a[tid] * b[tid] * s
 
-    jax_func = jax_ad_kernel(multi_output_kernel, num_outputs=2, static_argnames=("s",))
+    jax_func = jax_kernel(multi_output_kernel, num_outputs=2, differentiable=True, static_argnames=("s",))
 
     def caller(fn, a, b, s):
         c, d = fn(a, b, s)
@@ -1125,14 +1125,14 @@ def test_ffi_jax_ad_kernel_vec2(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_vec_kernel(a: wp.array(dtype=wp.vec2), s: float, out: wp.array(dtype=wp.vec2)):
         tid = wp.tid()
         out[tid] = a[tid] * s
 
-    jax_func = jax_ad_kernel(scale_vec_kernel, num_outputs=1, static_argnames=("s",))
+    jax_func = jax_kernel(scale_vec_kernel, num_outputs=1, differentiable=True, static_argnames=("s",))
 
     from functools import partial
 
@@ -1158,14 +1158,14 @@ def test_ffi_jax_ad_kernel_2d(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def add_one_2d(a: wp.array2d(dtype=float), out: wp.array2d(dtype=float)):
         i, j = wp.tid()
         out[i, j] = a[i, j] + 1.0
 
-    jax_func = jax_ad_kernel(add_one_2d, num_outputs=1)
+    jax_func = jax_kernel(add_one_2d, num_outputs=1, differentiable=True)
 
     @jax.jit
     def loss(a):
@@ -1187,14 +1187,14 @@ def test_ffi_jax_ad_kernel_mat22(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_mat_kernel(a: wp.array(dtype=wp.mat22), s: float, out: wp.array(dtype=wp.mat22)):
         tid = wp.tid()
         out[tid] = a[tid] * s
 
-    jax_func = jax_ad_kernel(scale_mat_kernel, num_outputs=1, static_argnames=("s",))
+    jax_func = jax_kernel(scale_mat_kernel, num_outputs=1, differentiable=True, static_argnames=("s",))
 
     from functools import partial
 
@@ -1219,14 +1219,16 @@ def test_ffi_jax_ad_kernel_vmap_simple(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_sum_square_kernel(a: wp.array(dtype=float), b: wp.array(dtype=float), s: float, c: wp.array(dtype=float)):
         tid = wp.tid()
         c[tid] = (a[tid] * s + b[tid]) ** 2.0
 
-    jax_func = jax_ad_kernel(scale_sum_square_kernel, num_outputs=1, static_argnames=("s",))
+    jax_func = jax_kernel(
+        scale_sum_square_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential"
+    )
 
     # per-sample loss; close over static scalar s to avoid vmap over statics
     def per_sample_loss(a, b):
@@ -1255,14 +1257,14 @@ def test_ffi_jax_ad_kernel_vmap_vec2(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_vec_kernel(a: wp.array(dtype=wp.vec2), s: float, out: wp.array(dtype=wp.vec2)):
         tid = wp.tid()
         out[tid] = a[tid] * s
 
-    jax_func = jax_ad_kernel(scale_vec_kernel, num_outputs=1, static_argnames=("s",), vmap_method="sequential")
+    jax_func = jax_kernel(scale_vec_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential")
 
     def per_sample_loss(a):
         out = jax_func(a, 2.0)[0]
@@ -1284,7 +1286,7 @@ def test_ffi_jax_ad_kernel_vmap_multi_output(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def multi_output_kernel(
@@ -1294,7 +1296,7 @@ def test_ffi_jax_ad_kernel_vmap_multi_output(test, device):
         c[tid] = a[tid] ** 2.0
         d[tid] = a[tid] * b[tid] * s
 
-    jax_func = jax_ad_kernel(multi_output_kernel, num_outputs=2, static_argnames=("s",), vmap_method="sequential")
+    jax_func = jax_kernel(multi_output_kernel, num_outputs=2, differentiable=True, static_argnames=("s",), vmap_method="sequential")
 
     def per_sample_loss(a, b):
         c, d = jax_func(a, b, 2.0)
@@ -1322,15 +1324,15 @@ def test_ffi_jax_ad_kernel_vmap_expand_dims_simple(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_sum_square_kernel(a: wp.array(dtype=float), b: wp.array(dtype=float), s: float, c: wp.array(dtype=float)):
         tid = wp.tid()
         c[tid] = (a[tid] * s + b[tid]) ** 2.0
 
-    jax_func = jax_ad_kernel(
-        scale_sum_square_kernel, num_outputs=1, static_argnames=("s",), vmap_method="sequential"
+    jax_func = jax_kernel(
+        scale_sum_square_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential"
     )
 
     def per_sample_loss(a, b):
@@ -1354,57 +1356,21 @@ def test_ffi_jax_ad_kernel_vmap_expand_dims_simple(test, device):
     assert_np_equal(np.asarray(db), ref_db)
 
 
-@unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_vmap_mismatched_inputs(test, device):
-    import jax
-    import jax.numpy as jp
-
-    from warp.jax_experimental.ffi import jax_ad_kernel
-
-    @wp.kernel
-    def scale_sum_square_kernel(a: wp.array(dtype=float), b: wp.array(dtype=float), s: float, c: wp.array(dtype=float)):
-        tid = wp.tid()
-        c[tid] = (a[tid] * s + b[tid]) ** 2.0
-
-    jax_func = jax_ad_kernel(
-        scale_sum_square_kernel, num_outputs=1, static_argnames=("s",), vmap_method="sequential"
-    )
-
-    def per_sample_loss(a, b):
-        out = jax_func(a, b, 1.5)[0]
-        return jp.sum(out)
-
-    B, N = 3, 8
-    a = jp.arange(B * N, dtype=jp.float32).reshape((B, N))
-    b = jp.ones((N,), dtype=jp.float32)
-
-    with jax.default_device(wp.device_to_jax(device)):
-        da, db = jax.vmap(jax.grad(per_sample_loss, argnums=(0, 1)), in_axes=(0, None))(a, b)
-
-    a_np = np.arange(B * N, dtype=np.float32).reshape((B, N))
-    b_np = np.ones((N,), dtype=np.float32)
-    s = 1.5
-    ref_da = 2.0 * (a_np * s + b_np) * s
-    ref_db = 2.0 * (a_np * s + b_np)
-
-    assert_np_equal(np.asarray(da), ref_da)
-    assert_np_equal(np.asarray(db), ref_db)
-
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
 def test_ffi_jax_ad_kernel_vmap_double_batch(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_sum_square_kernel(a: wp.array(dtype=float), b: wp.array(dtype=float), s: float, c: wp.array(dtype=float)):
         tid = wp.tid()
         c[tid] = (a[tid] * s + b[tid]) ** 2.0
 
-    jax_func = jax_ad_kernel(
-        scale_sum_square_kernel, num_outputs=1, static_argnames=("s",), vmap_method="sequential"
+    jax_func = jax_kernel(
+        scale_sum_square_kernel, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="sequential"
     )
 
     def per_elem_loss(a, b):
@@ -1435,14 +1401,14 @@ def test_ffi_jax_ad_kernel_vmap_2d_expand_dims(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def add_one_2d(a: wp.array2d(dtype=float), out: wp.array2d(dtype=float)):
         i, j = wp.tid()
         out[i, j] = a[i, j] + 1.0
 
-    jax_func = jax_ad_kernel(add_one_2d, num_outputs=1, vmap_method="sequential")
+    jax_func = jax_kernel(add_one_2d, num_outputs=1, differentiable=True, vmap_method="sequential")
 
     def per_sample_loss(a):
         out = jax_func(a)[0]
@@ -1459,19 +1425,19 @@ def test_ffi_jax_ad_kernel_vmap_2d_expand_dims(test, device):
 
 
 @unittest.skipUnless(_jax_version() >= (0, 4, 31), "Jax version too old for FFI custom_vjp")
-def test_ffi_jax_ad_kernel_auto_static_argnames(test, device):
+def test_ffi_jax_ad_kernel_static_required(test, device):
     import jax
     import jax.numpy as jp
 
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_sum_square_kernel(a: wp.array(dtype=float), b: wp.array(dtype=float), s: float, c: wp.array(dtype=float)):
         tid = wp.tid()
         c[tid] = (a[tid] * s + b[tid]) ** 2.0
 
-    # Omit static_argnames to exercise auto-detection of scalar statics
-    jax_func = jax_ad_kernel(scale_sum_square_kernel, num_outputs=1)
+    # Require explicit static_argnames for scalar s
+    jax_func = jax_kernel(scale_sum_square_kernel, num_outputs=1, differentiable=True, static_argnames=("s",))
 
     def loss(a, b, s):
         out = jax_func(a, b, s)[0]
@@ -1711,12 +1677,7 @@ try:
             test_ffi_jax_ad_kernel_vmap_expand_dims_simple,
             devices=jax_compatible_cuda_devices,
         )
-        add_function_test(
-            TestJax,
-            "test_ffi_jax_ad_kernel_vmap_broadcast_mismatched_inputs",
-            test_ffi_jax_ad_kernel_vmap_broadcast_mismatched_inputs,
-            devices=jax_compatible_cuda_devices,
-        )
+
         add_function_test(
             TestJax,
             "test_ffi_jax_ad_kernel_vmap_double_batch",

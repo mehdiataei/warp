@@ -961,7 +961,8 @@ Automatic Differentiation (AD) for Warp kernels in JAX
 
 Warp kernels can be given JAX gradients using a convenience wrapper that wires a custom VJP around a kernel and its adjoint.
 
-.. autofunction:: warp.jax_experimental.ffi.jax_ad_kernel
+.. note::
+   The ``jax_ad_kernel`` wrapper has been unified into ``jax_kernel``. Use ``jax_kernel(..., differentiable=True)`` for AD. Scalar/static arguments must be provided explicitly via ``static_argnames``.
 
 Basic example (one output, static scalar argument)::
 
@@ -969,7 +970,7 @@ Basic example (one output, static scalar argument)::
     import jax.numpy as jnp
 
     import warp as wp
-    from warp.jax_experimental.ffi import jax_ad_kernel
+    from warp.jax_experimental.ffi import jax_kernel
 
     @wp.kernel
     def scale_sum_square(
@@ -982,7 +983,7 @@ Basic example (one output, static scalar argument)::
         out[tid] = (a[tid] * s + b[tid]) ** 2.0
 
     # s is a scalar and must be static in JAX; mark it explicitly
-    jax_scale = jax_ad_kernel(scale_sum_square, num_outputs=1, static_argnames=("s",))
+    jax_scale = jax_kernel(scale_sum_square, num_outputs=1, differentiable=True, static_argnames=("s",))
 
     @jax.jit
     def loss(a, b, s):
@@ -1012,7 +1013,7 @@ Multiple outputs::
         c[tid] = a[tid] ** 2.0
         d[tid] = a[tid] * b[tid] * s
 
-    jax_multi = jax_ad_kernel(multi_output, num_outputs=2, static_argnames=("s",))
+    jax_multi = jax_kernel(multi_output, num_outputs=2, differentiable=True, static_argnames=("s",))
 
     def caller(fn, a, b, s):
         c, d = fn(a, b, s)
@@ -1029,7 +1030,7 @@ Vector and matrix arrays also work. Inner component dimensions are packed in the
         tid = wp.tid()
         out[tid] = a[tid] * s
 
-    jax_vec = jax_ad_kernel(scale_vec2, num_outputs=1, static_argnames=("s",))
+    jax_vec = jax_kernel(scale_vec2, num_outputs=1, differentiable=True, static_argnames=("s",))
 
     @jax.jit
     def vec_loss(a, s):
@@ -1064,7 +1065,7 @@ There are three options for ``vmap_method``:
 Per-sample batched gradients with broadcasting::
 
     # same scale_sum_square kernel and jax_scale from above, but ensure vmap-friendly method
-    jax_scale = jax_ad_kernel(scale_sum_square, num_outputs=1, static_argnames=("s",), vmap_method="broadcast_all")
+    jax_scale = jax_kernel(scale_sum_square, num_outputs=1, differentiable=True, static_argnames=("s",), vmap_method="broadcast_all")
 
     def per_sample_loss(a, b):
         (out,) = jax_scale(a, b, 2.0)
