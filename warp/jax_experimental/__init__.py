@@ -13,5 +13,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .custom_call import jax_kernel as _legacy_jax_kernel
-from .ffi import jax_kernel
+from .custom_call import jax_kernel
