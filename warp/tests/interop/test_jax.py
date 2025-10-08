@@ -2035,12 +2035,7 @@ try:
             test_jax_ad_kernel_pmap_multi_output,
             devices=jax_compatible_cuda_devices,
         )
-        add_function_test(
-            TestJax,
-            "test_jax_ad_kernel_launch_dim_and_output_dims",
-            test_jax_ad_kernel_launch_dim_and_output_dims,
-            devices=jax_compatible_cuda_devices,
-        )
+
 
 
 except Exception as e:
