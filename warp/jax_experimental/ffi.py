@@ -892,6 +892,7 @@ def jax_kernel(
                     gi.zero_()
                 except Exception as e:
                     wp.utils.warn(f"Failed to zero gradient array: {e}", stacklevel=2)
+                    raise e
 
         wp.launch(
             kernel,
